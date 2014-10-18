@@ -26,7 +26,7 @@ License
 -------
 Copyright © 2014, [Hazard Media Group LLC](http://hazardmediagroup.com)
 
-* [MIT License](https://github.com/Alekhen/intoor/blob/master/LICENSE)
+* [MIT License](https://github.com/Alekhen/subscribe-lp/blob/master/LICENSE)
 
 
 Development

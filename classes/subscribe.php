@@ -9,3 +9,9 @@
  * @link 		https://github.com/Alekhen/subscribe-lp
  * @version		Release: 0.1 (ALPHA)
  */
+
+class Subscribe {
+
+
+
+}

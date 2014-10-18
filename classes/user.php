@@ -1,6 +1,6 @@
 <?php
 /**
- * File and Directory Path Definitions
+ * User Class: Manages all functionality associated with admin users
  *
  * @package		Subscribe LP
  * @author		Colton James Wiscombe <colton@hazardmediagroup.com>
@@ -9,3 +9,9 @@
  * @link 		https://github.com/Alekhen/subscribe-lp
  * @version		Release: 0.1 (ALPHA)
  */
+
+class User {
+
+
+
+}
