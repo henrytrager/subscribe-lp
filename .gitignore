@@ -1,0 +1,6 @@
+codekit-config.json
+config.codekit
+.codekit-cache/
+.sass-cache/
+README.html
+config/config.php
