@@ -24,6 +24,7 @@ $db = new Database();
 
 // Run class setup methods
 API::setup();
+Subscribe::setup();
 
 // Initialize session tracking
 session_start();

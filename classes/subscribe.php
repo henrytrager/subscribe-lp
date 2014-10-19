@@ -12,6 +12,40 @@
 
 class Subscribe {
 
+	public static $table = [
+		'name' => 'subscriptions',
+		'version' => '1.0',
+		'key' => SUBS_AUTH,
+		'structure' => [
+			'email' => [
+				'sql' => 'VARCHAR(255)',
+				'encrypt' => true
+			],
+			'status' => [
+				'sql' => 'VARCHAR(255)',
+				'encrypt' => true
+			],
+			'create_date' => [
+				'sql' => 'DATE'
+			],
+			'create_time' => [
+				'sql' => 'TIME'
+			],
+			'delete_date' => [
+				'sql' => 'DATE'
+			],
+			'delete_time' => [
+				'sql' => 'TIME'
+			]
+		]
+	];
 
+	public static function setup() {
+
+		global $db;
+		$db->create_table( static::$table );
+		API::new_api_key( 'subscribe' );
+
+	}
 
 }
