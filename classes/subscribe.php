@@ -23,7 +23,8 @@ class Subscribe {
 			],
 			'status' => [
 				'sql' => 'VARCHAR(255)',
-				'encrypt' => true
+				'encrypt' => true,
+				'default' => 'active'
 			],
 			'create_date' => [
 				'sql' => 'DATE'
