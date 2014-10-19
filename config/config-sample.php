@@ -19,10 +19,14 @@ define( 'DB_PASS', 'password_here' );
 // Database table prefix
 define( 'TABLE_PREFIX', 'lp_' );
 
-// Authentication and Encryption Keys
+// Authentication and encryption keys
 define( 'SITE_AUTH', 'put your unique phrase here' );
 define( 'USER_AUTH', 'put your unique phrase here' );
 define( 'SUBS_AUTH', 'put your unique phrase here' );
+
+// General site definitions
+define( 'SITE_NAME', 'your site' );
+define( 'EMAIL_ADDRESS', 'example@example.com' )
 
 require_once dirname( __FILE__ ) . '/paths.php';
 require_once dirname( __FILE__ ) . '/load.php';

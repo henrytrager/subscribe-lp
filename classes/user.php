@@ -57,4 +57,72 @@ class User {
 
 	}
 
+	public static function run_action( $action, $params = array() ) {
+
+		$resp = array();
+		$resp['status'] = 'error';
+		$resp['type'] = 'invalid-action';
+		$resp['message'] = 'Defined API action cannot be performed';
+		$resp['display'] = 'Sorry, something went wrong. Please try again later.';
+
+		switch( $action ) {
+
+			case 'login':
+				$resp = static::login( $params['email'], $params['password'] );
+				break;
+
+			case 'add':
+				$resp = static::new();
+				break;
+
+			case 'remove':
+				$resp = static::delete( $params['email'], $params['token'] );
+				break;
+
+			case 'reset':
+				$resp = static::reset();
+				break;
+
+		}
+
+		return $resp;
+
+	}
+
+	protected static function login( $email, $password ) {
+
+		global $db;
+		$resp = array();
+
+		return $resp;
+
+	}
+
+	protected static function new() {
+
+		global $db;
+		$resp = array();
+
+		return $resp;
+
+	}
+
+	protected static function delete( $email, $token ) {
+
+		global $db;
+		$resp = array();
+
+		return $resp;
+
+	}
+
+	protected static function reset() {
+
+		global $db;
+		$resp = array();
+
+		return $resp;
+
+	}
+
 }
