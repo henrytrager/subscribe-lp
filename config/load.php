@@ -20,7 +20,10 @@ require_once SUBSCRIBE_CLASS;
 require_once USER_CLASS;
 
 // Instantiations
-$Database = new Database();
+$db = new Database();
+
+// Run class setup methods
+API::setup();
 
 // Initialize session tracking
 session_start();
