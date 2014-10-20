@@ -14,18 +14,17 @@
 header( 'Content-type: application/json' );
 require_once dirname( dirname( __FILE__ ) ) . '/config/config.php';
 
-$api = 'users';
-$params = $_GET;
-$resp = array();
+extract( $_GET );
 
 // Default API response
+$resp = array();
 $resp['status'] = 'error';
 $resp['type'] = 'unauthorized-access';
 $resp['message'] = 'Unauthorized Access';
 $resp['display'] = 'Unauthorized Access';
 
 // Authenticate API Key
-if( empty( $params['api-key'] ) || !API::key_auth( $api, $params['api-key'] ) ) :
+if( empty( $api_key ) || !API::key_auth( 'users', $api_key ) ) :
 
 	die( 'Unauthorized Access' );
 
@@ -35,16 +34,52 @@ else :
 	$resp['display'] = 'Sorry, but robots are not allowed to participate on this site.';
 
 	// Validate captcha (must be empty)
-	if( isset( $params['cc'] ) && $params['cc'] == '' ) :
+	if( isset( $cc ) && $cc == '' ) :
 
 		$resp['type'] = 'missing-parameters';
 		$resp['message'] = 'Warning: required parameters not found';
 		$resp['display'] = 'Please fill out all required fields.';
 
 		// Verify required parameters
-		if( !empty( $params['action'] ) && !empty( $params['username'] ) && ( !empty( $params['password'] ) || !empty( $params['token'] ) ) ) :
+		if( !empty( $action ) && !empty( $email ) ) :
 
-			$resp = User::run_action( $params['action'], $params );
+			switch( $action ) {
+
+				case 'login':
+					if( !empty( $pswd ) ) {
+						$resp = User::login( $email, $pswd );
+					}
+					break;
+
+				case 'add':
+					if( !empty( $pswd ) && !empty( $confirm ) ) {
+						$resp = User::new( $email, $pswd, $confirm );
+					}
+					break;
+
+				case 'remove':
+					if( !empty( $token ) ) {
+						$resp = User::delete( $email, $token );
+					}
+					break;
+
+				case 'reset':
+					$resp = User::reset( $email );
+					break;
+
+				case 'get':
+					if( !empty( $token ) ) {
+						$resp = User::get( $email, $token );
+					}
+					break;
+
+				default:
+					$resp['type'] = 'invalid-action';
+					$resp['message'] = 'Defined API action cannot be performed';
+					$resp['display'] = 'Sorry, something went wrong. Please try again later.';
+					break;
+
+			}
 
 		endif;
 

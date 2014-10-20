@@ -49,31 +49,7 @@ class Subscribe {
 
 	}
 
-	public static function run_action( $action, $params = array() ) {
-
-		$resp = array();
-		$resp['status'] = 'error';
-		$resp['type'] = 'invalid-action';
-		$resp['message'] = 'Defined API action cannot be performed';
-		$resp['display'] = 'Sorry, something went wrong. Please try again later.';
-
-		switch( $action ) {
-
-			case 'add':
-				$resp = static::new_subscriber( $params['email'] );
-				break;
-
-			case 'get':
-				$resp = static::get_subscribers( $params['email'], $params['token'] );
-				break;
-
-		}
-
-		return $resp;
-
-	}
-
-	protected static function new_subscriber( $email ) {
+	public static function new_subscriber( $email ) {
 
 		$resp = array();
 		$resp['status'] = 'error';
@@ -146,7 +122,7 @@ class Subscribe {
 
 	}
 
-	protected static function get_subscribers( $email, $token ) {
+	public static function get_subscribers( $email, $token ) {
 
 		$resp = array();
 		$resp['status'] = 'error';

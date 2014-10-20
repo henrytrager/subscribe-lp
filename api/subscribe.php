@@ -14,18 +14,17 @@
 header( 'Content-type: application/json' );
 require_once dirname( dirname( __FILE__ ) ) . '/config/config.php';
 
-$api = 'subscribe';
-$params = $_GET;
-$resp = array();
+extract( $_GET );
 
 // Default API response
+$resp = array();
 $resp['status'] = 'error';
 $resp['type'] = 'unauthorized-access';
 $resp['message'] = 'Unauthorized Access';
 $resp['display'] = 'Unauthorized Access';
 
 // Authenticate API Key
-if( empty( $params['api-key'] ) || !API::key_auth( $api, $params['api-key'] ) ) :
+if( empty( $api_key ) || !API::key_auth( 'subscribe', $api_key ) ) :
 
 	die( 'Unauthorized Access' );
 
@@ -35,16 +34,34 @@ else :
 	$resp['display'] = 'Sorry, but robots are not allowed to participate on this site.';
 
 	// Validate captcha (must be empty)
-	if( isset( $params['cc'] ) && $params['cc'] == '' ) :
+	if( isset( $cc ) && $cc == '' ) :
 
 		$resp['type'] = 'missing-parameters';
 		$resp['message'] = 'Warning: required parameters not found';
 		$resp['display'] = 'Please fill out all required fields.';
 
 		// Verify required parameters
-		if( !empty( $params['action'] ) && !empty( $params['email'] ) ) :
+		if( !empty( $action ) && !empty( $email ) ) :
 
-			$resp = Subscribe::run_action( $params['action'], $params );
+			switch( $action ) {
+
+				case 'add':
+					$resp = Subscribe::new_subscriber( $email );
+					break;
+
+				case 'get':
+					if( !empty( $token ) ) {
+						$resp = Subscribe::get_subscribers( $email, $token );
+					}
+					break;
+
+				default:
+					$resp['type'] = 'invalid-action';
+					$resp['message'] = 'Defined API action cannot be performed';
+					$resp['display'] = 'Sorry, something went wrong. Please try again later';
+					break;
+
+			}
 
 		endif;
 
