@@ -412,11 +412,12 @@ class User {
 			$resp['message'] = 'Database communication error';
 			$resp['display'] = 'Sorry, but something went wrong. Please try again later.';
 
+			$user = $db->get_row( static::$table, 'email', $email );
 			$data = $db->get_data( static::$table );
 			unset( $data['password'] );
 			unset( $data['token'] );
 
-			if( !empty( $data ) ) :
+			if( !empty( $user['id'] ) && !empty( $data ) ) :
 
 				$resp['status'] = 'success';
 				$resp['type'] = 'report-generated';
@@ -424,6 +425,7 @@ class User {
 				$resp['display'] = 'The data you requested has been successfully exported.';
 
 				$report = [
+					'user' => $user['id'],
 					'name' => 'Users',
 					'data' => $data
 				];

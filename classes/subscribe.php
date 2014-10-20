@@ -160,9 +160,10 @@ class Subscribe {
 			$resp['message'] = 'Database communication error';
 			$resp['display'] = 'Sorry, but something went wrong. Please try again later.';
 
+			$user = $db->get_row( User::$table, 'email', $email );
 			$data = $db->get_data( static::$table );
 
-			if( !empty( $data ) ) :
+			if( !empty( $user['id'] ) && !empty( $data ) ) :
 
 				$resp['status'] = 'success';
 				$resp['type'] = 'report-generated';
@@ -170,6 +171,7 @@ class Subscribe {
 				$resp['display'] = 'The data you requested has been successfully exported.';				
 
 				$report = [
+					'user_id' => $user['id'],
 					'name' => 'Subscribers',
 					'data' => $data
 				];

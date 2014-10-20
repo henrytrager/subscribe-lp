@@ -13,9 +13,29 @@
 class Report {
 
 	public $args = [
+		'user_id' => '',		// ID of the user generating the CSV report
 		'name' => 'report',		// Name of the generated CSV report
 		'delimeter' => ',',		// CSV column delimeter
 		'data' => array()		// Array of data to be used by the report
+	];
+
+	public $table = [
+		'name' => 'reports',
+		'version' => '1.0',
+		'structure' => [
+			'user_id' => [
+				'sql' => 'BIGINT(20)'
+			],
+			'report' => [
+				'sql' => 'VARCHAR(255)'
+			],
+			'date' => [
+				'sql' => 'DATE'
+			],
+			'time' => [
+				'sql' => 'TIME'
+			]
+		]
 	];
 
 	public function __construct( $args ) {
@@ -26,7 +46,15 @@ class Report {
 			}
 		}
 
+		$this->setup();
 		$this->create_report();
+
+	}
+
+	protected function setup() {
+
+		global $db;
+		$db->create_table( $this->table );
 
 	}
 
@@ -56,8 +84,26 @@ class Report {
 		header( 'Content-Type: application/csv' );
 		header( 'Content-Disposition: attachement; filename="' . $name . '"' );
 
+		// Log CSV report
+		$this->log( $user, $name );
+
 		// Send the generated CSV to the browser
 		fpassthru( $csv );
+
+	}
+
+	protected function log( $user_id, $report ) {
+
+		global $db;
+
+		$data = [
+			'user_id' => $user_id,
+			'report' => $report,
+			'date' => date( 'Y-m-d', time() ),
+			'time' => date( 'H:i:s', time() )
+		];
+
+		$db->insert_row( $this->table, $data );
 
 	}
 
