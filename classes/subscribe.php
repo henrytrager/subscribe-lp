@@ -156,7 +156,27 @@ class Subscribe {
 
 		if( User::authenticate( $email, $token ) ) :
 
-			// Export CSV
+			$resp['type'] = 'database-error';
+			$resp['message'] = 'Database communication error';
+			$resp['display'] = 'Sorry, but something went wrong. Please try again later.';
+
+			$data = $db->get_data( static::$table );
+
+			if( !empty( $data ) ) :
+
+				$resp['status'] = 'success';
+				$resp['type'] = 'report-generated';
+				$resp['message'] = 'Report successfully generated';
+				$resp['display'] = 'The data you requested has been successfully exported.';				
+
+				$report = [
+					'name' => 'Subscribers',
+					'data' => $data
+				];
+
+				new Report( $report );
+
+			endif;
 
 		endif;
 
