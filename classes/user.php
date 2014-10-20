@@ -377,6 +377,41 @@ class User {
 		$email = strtolower( $email );
 		$resp = array();
 
+		$resp['status'] = 'error';
+		$resp['type'] = 'unauthorized-access';
+		$resp['message'] = 'Unauthorized Access';
+		$resp['display'] = 'Unauthorized Access';
+
+		if( static::authenticate( $email, $token ) ) :
+
+			$data = $db->get_data( static::$table );
+			unset( $data['password'] );
+			unset( $data['token'] );
+			$resp = $data;
+
+		endif;
+
+		return $resp;
+
+	}
+
+	public static function export( $email, $token ) {
+
+		global $db;
+		$email = strtolower( $email );
+		$resp = array();
+
+		$resp['status'] = 'error';
+		$resp['type'] = 'unauthorized-access';
+		$resp['message'] = 'Unauthorized Access';
+		$resp['display'] = 'Unauthorized Access';
+
+		if( static::authenticate( $email, $token ) ) :
+
+			// Export CSV
+
+		endif;
+
 		return $resp;
 
 	}

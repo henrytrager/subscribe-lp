@@ -143,4 +143,25 @@ class Subscribe {
 
 	}
 
+	public static function export_subscribers( $email, $token ) {
+
+		global $db;
+		$email = strtolower( $email );
+		$resp = array();
+
+		$resp['status'] = 'error';
+		$resp['type'] = 'unauthorized-access';
+		$resp['message'] = 'Unauthorized Access';
+		$resp['display'] = 'Unauthorized Access';
+
+		if( User::authenticate( $email, $token ) ) :
+
+			// Export CSV
+
+		endif;
+
+		return $resp;
+
+	}
+
 }

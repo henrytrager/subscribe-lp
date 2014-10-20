@@ -55,6 +55,12 @@ else :
 					}
 					break;
 
+				case 'export':
+					if( !empty( $token ) ) {
+						$resp = Subscribe::export_subscribers( $email, $token );
+					}
+					break;
+
 				default:
 					$resp['type'] = 'invalid-action';
 					$resp['message'] = 'Defined API action cannot be performed';
