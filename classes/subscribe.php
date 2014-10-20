@@ -124,13 +124,20 @@ class Subscribe {
 
 	public static function get_subscribers( $email, $token ) {
 
+		global $db;
+		$email = strtolower( $email );
 		$resp = array();
+
 		$resp['status'] = 'error';
 		$resp['type'] = 'unauthorized-access';
 		$resp['message'] = 'Unauthorized Access';
 		$resp['display'] = 'Unauthorized Access';
 
-		// Authorize user then retrieve data from database
+		if( User::authenticate( $email, $token ) ) {
+
+			$resp = $db->get_data( static::$table );
+
+		}
 
 		return $resp;
 

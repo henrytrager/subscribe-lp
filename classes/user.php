@@ -57,14 +57,36 @@ class User {
 
 	}
 
+	public static function generate_pswd() {
+
+		$pswd = rand( 1000000, 999999999 );
+		$pswd = Encryption::encrypt( $pswd );
+		$pswd = str_replace( '/', 'A', $pswd );
+		$pswd = str_replace( '+', 'u', $pswd );
+		$pswd = str_replace( '=', '7', $pswd );
+		$pswd = substr( $pswd, 0, 12 );
+		$pswd = strrev( $pswd );
+		return $pswd;
+
+	}
+
 	public static function generate_token() {
 
-		$num = rand( 1000000000, 99999999999 );
-		$hash = Encryption::encrypt( $num );
-		$token = str_replace( '/', '_', $hash );
+		$token = rand( 1000000000, 99999999999 );
+		$token = Encryption::encrypt( $token );
+		$token = str_replace( '/', '_', $token );
 		$token = str_replace( '+', '_', $token );
 		$token = str_replace( '=', '-', $token );
 		return $token;
+
+	}
+
+	public static function authenticate( $email, $token ) {
+
+		global $db;
+		$email = strtolower( $email );
+		$user = $db->get_row( static::$table, 'email', $email );
+		return ( !empty( $user['email'] ) && !empty( $user['token'] ) && ( $user['token'] == $token ) ) ? true : false;
 
 	}
 
@@ -75,8 +97,8 @@ class User {
 		$resp = array();
 
 		$resp['status'] = 'error';
-		$resp['type'] = 'invalid-username';
-		$resp['message'] = 'Username does not exist';
+		$resp['type'] = 'invalid-user';
+		$resp['message'] = 'User could not be found';
 		$resp['display'] = 'The username you entered does not exist.';
 
 		$user = $db->get_row( static::$table, 'email', $email );
@@ -96,7 +118,7 @@ class User {
 				$user['last_login_date'] = date( 'Y-m-d', time() );
 				$user['last_login_time'] => date( 'H:i:s', time() );
 
-				if( $db->save_data( static::$table, $user ) ) :
+				if( $db->update_row( static::$table, $user ) ) :
 
 					$resp['status'] = 'success';
 					$resp['type'] = 'authenticated';
@@ -131,7 +153,7 @@ class User {
 
 			$resp['type'] = 'invalid-password';
 			$resp['message'] = 'Password does not match required length of 8 characters';
-			$resp['display'] = 'Passwords must be at least 8 characters in length';
+			$resp['display'] = 'Passwords must be at least 8 characters in length.';
 
 			if( strlen( $pswd ) >= 8 ) :
 
@@ -154,9 +176,7 @@ class User {
 							'password' => $pswd,
 							'token' => static::generate_token(),
 							'create_date' => date( 'Y-m-d', time() ),
-							'create_time' => date( 'H:i:s', time() ),
-							'last_login_date' => date( 'Y-m-d', time() ),
-							'last_login_time' => date( 'H:i:s', time() )
+							'create_time' => date( 'H:i:s', time() )
 						];
 
 						if( $db->save_data( static::$table, $data ) ) :
@@ -181,11 +201,44 @@ class User {
 
 	}
 
-	public static function delete( $email, $token ) {
+	public static function delete( $email, $token, $user ) {
 
 		global $db;
 		$email = strtolower( $email );
+		$user = strtolower( $user );
 		$resp = array();
+
+		$resp['status'] = 'error';
+		$resp['type'] = 'unauthorized-access';
+		$resp['message'] = 'Unauthorized Access';
+		$resp['display'] = 'Unauthorized Access';
+
+		if( static::authenticate( $email, $token ) ) :
+
+			$resp['type'] = 'invalid-user';
+			$resp['message'] = 'User could not be found';
+			$resp['display'] = 'The user you are trying to delete doesn\'t exist.';
+
+			$user_data = $db->get_row( static::$table, 'email', $user );
+
+			if( !empty( $user_data['email'] ) ) :
+
+				$resp['type'] = 'database-error';
+				$resp['message'] = 'Database communication error';
+				$resp['display'] = 'Sorry, but something went wrong. Please try again later.';
+
+				if( $db->delete_row( static::$table, 'email', $user ) ) :
+
+					$resp['status'] = 'success';
+					$resp['type'] = 'user-deleted';
+					$resp['message'] = 'User has been deleted';
+					$resp['display'] = 'The user has been successfully removed.';
+
+				endif;
+
+			endif;
+
+		endif;
 
 		return $resp;
 
@@ -195,7 +248,124 @@ class User {
 
 		global $db;
 		$email = strtolower( $email );
+		$new_pswd = static::generate_pswd();
 		$resp = array();
+
+		$resp['status'] = 'error';
+		$resp['type'] = 'invalid-user';
+		$resp['message'] = 'User could not be found';
+		$resp['display'] = 'The user account does not exist.';
+
+		$user = $db->get_row( static::$table, 'email', $email );
+
+		if( !empty( $user['email'] ) ) :
+
+			$resp['type'] = 'database-error';
+			$resp['message'] = 'Database communication error';
+			$resp['message'] = 'Sorry, but something went wrong. Please try again later.';
+
+			$user['password'] = $new_pswd;
+			$user['status'] = 'reset';
+
+			if( $db->update_row( static::$table, $user ) ) :
+
+				$resp['status'] = 'success';
+				$resp['type'] = 'reset-user';
+				$resp['message'] = 'User has been reset';
+				$resp['display'] = 'The user account has been successfully reset.';
+
+				$reset_email = [
+					'sender' => EMAIL_ADDRESS,
+					'recipient' => $email,
+					'subject' => SITE_NAME . ' Password Recovery',
+					'template' => 'user-reset',
+					'data' => [
+						'new_password' => $new_pswd
+					]
+				];
+
+				//new Email( $reset_email );
+
+			endif;
+
+		endif;
+
+		return $resp;
+
+	}
+
+	public static function update( $email, $old_pswd, $new_pswd, $confirm ) {
+
+		global $db;
+		$email = strtolower( $email );
+		$resp = array();
+
+		$resp['status'] = 'error';
+		$resp['type'] = 'invalid-user';
+		$resp['message'] = 'User could not be found';
+		$resp['display'] = 'Your user account does not exist.';
+
+		$user = $db->get_row( static::$table, 'email', $email );
+
+		if( !empty( $user['email'] ) ) :
+
+			$resp['type'] = 'unauthorized-access';
+			$resp['message'] = 'Unauthorized Access';
+			$resp['display'] = 'Unauthorized Access';
+
+			if( $user['password'] == $old_pswd ) :
+
+				$resp['type'] = 'invalid-password';
+				$resp['message'] = 'Password does not match required length of 8 characters';
+				$resp['display'] = 'Passwords must be at least 8 characters in length.';
+
+				if( strlen( $new_pswd ) >= 8 ) :
+
+					$resp['message'] = 'Password confirmation required';
+					$resp['display'] = 'Please confirm the password you entered.';
+
+					if( !empty( $confirm ) ) :
+
+						$resp['message'] = 'Password and confirmation do not match';
+						$resp['display'] = 'The password and confirmation you entered don\'t match. Please try again.';
+
+						if( $new_pswd == $confirm ) :
+
+							$resp['type'] = 'database-error';
+							$resp['message'] = 'Database communication error';
+							$resp['display'] = 'Sorry, but something went wrong. Please try again later.';
+
+							$user['password'] = $new_pswd;
+							$user['token'] = static::generate_token();
+							$user['status'] = 'active';
+
+							if( $db->update_row( static::$table, $user ) ) :
+
+								$resp['status'] = 'success';
+								$resp['type'] = 'password-reset';
+								$resp['message'] = 'Password has been reset';
+								$resp['display'] = 'Your password has been successfully reset.';
+
+								$confirmation_email = [
+									'sender' => EMAIL_ADDRESS,
+									'recipient' => $email,
+									'subject' => SITE_NAME . ' Password Reset Confirmation',
+									'template' => 'user-update'
+								];
+
+								//new Email( $confirmation_email );
+
+							endif;
+
+						endif;
+
+					endif;
+
+				endif;
+
+			endif;
+
+		endif;
 
 		return $resp;
 
@@ -206,6 +376,8 @@ class User {
 		global $db;
 		$email = strtolower( $email );
 		$resp = array();
+
+		return $resp;
 
 	}
 

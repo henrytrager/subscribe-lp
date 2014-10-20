@@ -58,13 +58,19 @@ else :
 					break;
 
 				case 'remove':
-					if( !empty( $token ) ) {
-						$resp = User::delete( $email, $token );
+					if( !empty( $token ) && !empty( $user ) ) {
+						$resp = User::delete( $email, $token, $user );
 					}
 					break;
 
 				case 'reset':
 					$resp = User::reset( $email );
+					break;
+
+				case 'update':
+					if( !empty( $old_pswd ) && !empty( $new_pswd ) && !empty( $confirm ) ) {
+						$resp = User::update( $email, $old_pswd, $new_pswd, $confirm );
+					}
 					break;
 
 				case 'get':
