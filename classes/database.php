@@ -78,9 +78,24 @@ class Database {
 
 		extract( $table_array );
 
-		// check current version to see if match
-		// if not match change
-		// if match then do nothing
+		$data = $this->get_row( $this->table, 'table_name', $name );
+
+		if( empty( $data['table_name'] ) ) :
+
+			$data['table_name'] = $name;
+			$data['version'] = $version;
+
+			$this->insert_row( $this->table, $data );
+
+		else :
+
+			if( $data['version'] !== $version ) :
+
+				$this->update_table( $table_array );
+
+			endif;
+
+		endif;
 
 	}
 

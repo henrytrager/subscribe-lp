@@ -26,7 +26,7 @@ define( 'SUBS_AUTH', 'put your unique phrase here' );
 
 // General site definitions
 define( 'SITE_NAME', 'your site' );
-define( 'EMAIL_ADDRESS', 'example@example.com' )
+define( 'EMAIL_ADDRESS', 'example@example.com' );
 
 require_once dirname( __FILE__ ) . '/paths.php';
 require_once dirname( __FILE__ ) . '/load.php';

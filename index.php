@@ -9,3 +9,5 @@
  * @link       https://github.com/Alekhen/subscribe-lp
  * @version    Release: 0.1 (ALPHA)
  */
+
+require_once dirname( __FILE__ ) . '/config/config.php';

@@ -116,7 +116,7 @@ class User {
 				$resp['display'] = 'Sorry, but something went wrong. Please try again later.';
 
 				$user['last_login_date'] = date( 'Y-m-d', time() );
-				$user['last_login_time'] => date( 'H:i:s', time() );
+				$user['last_login_time'] = date( 'H:i:s', time() );
 
 				if( $db->update_row( static::$table, $user ) ) :
 
@@ -136,7 +136,7 @@ class User {
 
 	}
 
-	public static function new( $email, $pswd, $confirm ) {
+	public static function create_new( $email, $pswd, $confirm ) {
 
 		global $db;
 		$email = strtolower( $email );
@@ -425,7 +425,7 @@ class User {
 				$resp['display'] = 'The data you requested has been successfully exported.';
 
 				$report = [
-					'user' => $user['id'],
+					'user_id' => $user['id'],
 					'name' => 'Users',
 					'data' => $data
 				];

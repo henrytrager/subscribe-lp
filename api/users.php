@@ -53,7 +53,7 @@ else :
 
 				case 'add':
 					if( !empty( $pswd ) && !empty( $confirm ) ) {
-						$resp = User::new( $email, $pswd, $confirm );
+						$resp = User::create_new( $email, $pswd, $confirm );
 					}
 					break;
 
