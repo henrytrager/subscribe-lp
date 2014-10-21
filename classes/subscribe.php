@@ -13,7 +13,7 @@
 class Subscribe {
 
 	public static $table = [
-		'name' => 'subscriptions',
+		'name' => 'subscribers',
 		'version' => '1.0',
 		'key' => SUBS_AUTH,
 		'structure' => [

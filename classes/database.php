@@ -41,8 +41,9 @@ class Database {
 			$conn = new PDO( 'mysql:host=' . DB_HOST . ';dbname=' . DB_NAME, DB_USER, DB_PASS );
 			$conn->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
 			$this->connection = $conn;
-		} catch( Exception $e ) {
+		} catch( PDOException $e ) {
 			$this->connection = NULL;
+			die( 'Error: Could not connect to database: ' . $e->getMessage() );
 		}
 
 	}
@@ -85,14 +86,15 @@ class Database {
 
 			$data['table_name'] = $name;
 			$data['table_version'] = $version;
-
 			$this->insert_row( $this->table, $data );
 
 		else :
 
 			if( $data['table_version'] !== $version ) :
 
-				$this->update_table( $table_array );
+					$data['table_version'] = $version;
+					$this->update_table( $table_array );
+					$this->update_row( $this->table, $data );
 
 			endif;
 
@@ -102,9 +104,40 @@ class Database {
 
 	public function update_table( $table_array ) {
 
-		// Check current table version
-		// If new table has a greater value then loop through columms
-		// add, update, or delete columns based on new structure
+		extract( $table_array );
+		$table = TABLE_PREFIX . $name;
+		$columns = array();
+		$count = 0;
+
+		$sql = "SHOW COLUMNS FROM $table";
+		$stmt = $this->connection->prepare( $sql );
+		$result = $stmt->execute();
+
+		while( $column_data = $stmt->fetch( PDO::FETCH_ASSOC ) ) {
+			$columns[$column_data['Field']] = $column_data;
+		}
+
+		foreach( $structure as $column => $args ) {
+
+			if( !array_key_exists( $column, $columns ) ) :
+
+				$default = ( !empty( $args['default'] ) ) ? $args['default'] : NULL;
+				$this->add_column( $table, $column, $args['sql'], $default );
+
+			else :
+
+				foreach( $columns as $col => $col_values ) {
+
+					if( !array_key_exists( $col, $structure ) && $count == 0 ) {
+						$this->delete_column( $table, $col );
+					}
+
+				}
+
+			endif;
+			$count++;
+
+		}
 
 	}
 
@@ -119,11 +152,12 @@ class Database {
 
 	}
 
-	protected function add_column( $table, $column, $datatype ) {
+	protected function add_column( $table, $column, $datatype, $default = NULL ) {
 
 		if( !empty( $table ) && !empty( $column ) && !empty( $datatype ) ) :
 
-			$sql = "ALTER TABLE $table ADD $column $datatype";
+			$default = ( !empty( $default ) ) ? " DEFAULT '$default'" : "";
+			$sql = "ALTER TABLE $table ADD $column $datatype NOT NULL$default";
 			$stmt = $this->connection->prepare( $sql );
 			return $stmt->execute();
 
@@ -133,7 +167,7 @@ class Database {
 
 	}
 
-	protected function update_column( $table, $column, $datatype ) {
+	protected function update_column_datatype( $table, $column, $datatype ) {
 
 		if( !empty( $table ) && !empty( $column ) && !empty( $datatype ) ) :
 
@@ -315,7 +349,7 @@ class Database {
 		$table = TABLE_PREFIX . $name;
 		$id = $data['id'];
 		$sets = "";
-		$count = 1;
+		$count = 2;
 
 		foreach( $data as $column => $value ) {
 			if( $column !== 'id' ) {
