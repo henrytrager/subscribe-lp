@@ -21,8 +21,9 @@ class Database {
 			'table_name' => [
 				'sql' => 'VARCHAR(255)'
 			],
-			'version' => [
-				'sql' => 'DECIMAL(4,1)'
+			'table_version' => [
+				'sql' => 'DECIMAL(4,1)',
+				'default' => '0.0'
 			]
 		]
 	];
@@ -62,7 +63,7 @@ class Database {
 
 		foreach( $structure as $column => $args ) {
 			$default = ( !empty( $args['default'] ) && $args['sql'] !== 'LONGTEXT' ) ? " DEFAULT '{$args['default']}'" : "";
-			$sql .= "{$column} {$value['sql']} NOT NULL{$default}, ";
+			$sql .= "{$column} {$args['sql']} NOT NULL{$default}, ";
 		}
 
 		$sql .= "UNIQUE KEY id (id) )";
@@ -83,13 +84,13 @@ class Database {
 		if( empty( $data['table_name'] ) ) :
 
 			$data['table_name'] = $name;
-			$data['version'] = $version;
+			$data['table_version'] = $version;
 
 			$this->insert_row( $this->table, $data );
 
 		else :
 
-			if( $data['version'] !== $version ) :
+			if( $data['table_version'] !== $version ) :
 
 				$this->update_table( $table_array );
 
