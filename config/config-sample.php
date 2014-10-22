@@ -26,6 +26,7 @@ define( 'SUBS_AUTH', 'put your unique phrase here' );
 
 // General site definitions
 define( 'SITE_NAME', 'your site' );
+define( 'SITE_URL', 'http:// the remote url' );
 define( 'EMAIL_ADDRESS', 'example@example.com' );
 
 // Google Analytics

@@ -45,7 +45,7 @@ class Subscribe {
 
 		global $db;
 		$db->create_table( static::$table );
-		API::new_api_key( 'subscribe' );
+		API::add_key( 'subscribe' );
 
 	}
 

@@ -10,6 +10,10 @@
  * @version    Release: 0.1 (ALPHA)
  */
 
+// Current Page
+$request_uri = explode( '?', $_SERVER['REQUEST_URI'] );
+define( 'CURRENT_PAGE', $request_uri[0] );
+
 // General Directories
 define( 'ROOT_DIR', dirname( dirname( __FILE__ ) ) . '/' );
 define( 'API_DIR', ROOT_DIR . 'api/' );
@@ -20,7 +24,8 @@ define( 'REPORTS_DIR', ROOT_DIR . 'reports/' );
 define( 'VIEWS_DIR', ROOT_DIR . 'views/' );
 
 // APIs
-define( 'SUBSCRIBE_API', API_DIR . 'subscribe.php' );
+define( 'SUBSCRIBE_API', SITE_URL . '/api/subscribe.php' );
+define( 'USERS_API', SITE_URL . '/api/users.php' );
 
 // Classes
 define( 'API_CLASS', CLASSES_DIR . 'api.php' );

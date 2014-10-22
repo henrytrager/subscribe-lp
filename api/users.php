@@ -97,7 +97,18 @@ else :
 
 	endif;
 
-endif;
+	// Return JSON response string or redirect
+	if( !empty( $redirect ) ) :
 
-// Return JSON response string
-echo json_encode( $resp );
+		$resp['message'] = base64_encode( $resp['message'] );
+		$resp['display'] = base64_encode( $resp['display'] );
+
+		header( 'Location: ' . $redirect . '?' . http_build_query( $resp ), TRUE, 303 );
+
+	else :
+
+		echo json_encode( $resp );
+
+	endif;
+
+endif;

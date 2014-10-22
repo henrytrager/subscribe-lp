@@ -318,7 +318,9 @@ class Database {
 
 	public function save_data( $table_array, $data ) {
 
-		return !empty( $data['id'] ) ? $this->update_row( $table_array, $data ) : $this->insert_row( $table_array, $data );
+		return !empty( $data['id'] )
+			? $this->update_row( $table_array, $data )
+			: $this->insert_row( $table_array, $data );
 
 	}
 

@@ -53,7 +53,7 @@ class User {
 
 		global $db;
 		$db->create_table( static::$table );
-		API::new_api_key( 'users' );
+		API::add_key( 'users' );
 
 	}
 

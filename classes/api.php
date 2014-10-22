@@ -45,12 +45,12 @@ class API {
 
 	}
 
-	public static function new_api_key( $name ) {
+	public static function add_key( $name ) {
 
 		global $db;
 		$data = $db->get_row( static::$table, 'name', $name );
-		if( !empty( $data['name'] ) ) {
-			$db->save_data( static::$table, [ 'name' => $name, 'api_key' => static::keygen() ] );
+		if( empty( $data['name'] ) ) {
+			$db->insert_row( static::$table, [ 'name' => $name, 'api_key' => static::keygen() ] );
 		}
 
 	}
@@ -59,15 +59,15 @@ class API {
 
 		global $db;
 		$data = $db->get_row( static::$table, 'name', $name );
-		return ( !empty( $data['name'] ) && ( $data['api_key'] == Encryption::encrypt( $key, static::$table['key'] ) ) ) ? true : false;
+		return ( !empty( $data['name'] ) && ( $data['api_key'] == $key ) ) ? true : false;
 
 	}
 
-	public static function get_api_key( $name ) {
+	public static function get_key( $name ) {
 
 		global $db;
 		$data = $db->get_row( static::$table, 'name', $name );
-		return !empty( $data['api_key'] ) ? $data['api_key'] : '';
+		return !empty( $data['name'] ) ? $data['api_key'] : '';
 
 	}
 
