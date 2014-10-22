@@ -10,6 +10,8 @@
  * @version    Release: 0.1 (ALPHA)
  */
 
+if( !defined( 'RESTRICT' ) || !RESTRICT ) { die( 'Unauthorized Access' ); }
+
 if( GA ) : ?>
 
 <!-- GOOGLE ANALYTICS -->

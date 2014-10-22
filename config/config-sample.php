@@ -33,5 +33,8 @@ define( 'EMAIL_ADDRESS', 'example@example.com' );
 define( 'GA', false );
 define( 'GA_ACCOUNT', 'your account ID' );
 
+// Restrict direct access to files
+define( 'RESTRICT', true );
+
 require_once dirname( __FILE__ ) . '/paths.php';
 require_once dirname( __FILE__ ) . '/load.php';
