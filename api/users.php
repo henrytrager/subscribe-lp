@@ -14,7 +14,7 @@
 header( 'Content-type: application/json' );
 require_once dirname( dirname( __FILE__ ) ) . '/config/config.php';
 
-extract( $_GET );
+extract( $_POST );
 
 // Default API response
 $resp = array();
