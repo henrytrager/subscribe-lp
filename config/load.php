@@ -10,6 +10,9 @@
  * @version    Release: 0.1 (ALPHA)
  */
 
+// Include global functions
+require_once dirname( __FILE__ ) . '/functions.php';
+
 // Include required classes
 require_once API_CLASS;
 require_once DATABASE_CLASS;

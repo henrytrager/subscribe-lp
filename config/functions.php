@@ -1,6 +1,6 @@
 <?php
 /**
- * Subscription Landing Page Index
+ * Global Functions
  *
  * @package    Subscribe LP
  * @author     Colton James Wiscombe <colton@hazardmediagroup.com>
@@ -10,4 +10,8 @@
  * @version    Release: 0.1 (ALPHA)
  */
 
-require_once dirname( __FILE__ ) . '/config/config.php';
+function get( $file_name ) {
+
+	include INC_DIR . $file_name . '.php';
+
+}

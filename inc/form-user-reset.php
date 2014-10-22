@@ -9,3 +9,7 @@
  * @link       https://github.com/Alekhen/subscribe-lp
  * @version    Release: 0.1 (ALPHA)
  */
+
+?>
+
+<h2>form-user-reset</h2>
