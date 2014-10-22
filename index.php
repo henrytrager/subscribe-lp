@@ -1,6 +1,6 @@
 <?php
 /**
- * Admin Login Page
+ * Subscription Landing Page Index
  *
  * @package    Subscribe LP
  * @author     Colton James Wiscombe <colton@hazardmediagroup.com>
@@ -18,7 +18,7 @@ require_once dirname( __FILE__ ) . '/config/config.php';
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-	<title><?= 'Admin Login | ' . SITE_NAME ?></title>
+	<title><?= SITE_NAME ?></title>
 
 	<!--[if lt IE 9]>
 	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -26,12 +26,14 @@ require_once dirname( __FILE__ ) . '/config/config.php';
 
 	<link rel="shortcut icon" href="<?= ROOT_DIR . 'favicon.ico' ?>">
 
+	<?php get( 'google-analytics' ); ?>
+
 </head>
 <body>
 
-	<h1>LOGIN</h1>
+	<h1>INDEX</h1>
 
-	<?php get( 'form-user-initial' ); ?>
+	<?php get( 'form-subscribe' ); ?>
 
 </body>
 </html>
