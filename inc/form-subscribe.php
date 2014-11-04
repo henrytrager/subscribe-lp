@@ -27,7 +27,7 @@ if( !defined( 'RESTRICT' ) || !RESTRICT ) { die( 'Unauthorized Access' ); }
 	<input type="text" id="form-subscribe-cc" name="cc" value="" placeholder="Leave this field blank">
 	<input type="submit" id="form-subscribe-submit" value="Subscribe">
 
-	<?= isset( $_GET['display'] ) ? '<ul id="form-subscribe-display" class="messages"><li>' . base64_decode( $_GET['display'] ) . '</li></ul>' : '<ul id="form-subscribe-display" class="messages" style="display:none;"></ul>'; ?></ul>
+	<?= isset( $_GET['display'] ) ? '<ul id="form-subscribe-display" class="messages"><li>' . base64_decode( $_GET['display'] ) . '</li></ul>' : '<ul id="form-subscribe-display" class="messages" style="display:none;"></ul>'; ?>
 
 </form>
 
