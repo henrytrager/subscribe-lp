@@ -31,7 +31,7 @@ require_once dirname( __FILE__ ) . '/config/config.php';
 
 	<h1>LOGIN</h1>
 
-	<?php get( 'form-user-initial' ); ?>
+	<?php ( $db->have_rows( User::$table ) ) ? inc( 'form-user-login' ) : inc( 'form-user-initial' ); ?>
 
 </body>
 </html>

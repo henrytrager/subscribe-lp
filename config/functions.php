@@ -10,7 +10,7 @@
  * @version    Release: 0.1 (ALPHA)
  */
 
-function get( $file_name ) {
+function inc( $file_name ) {
 
 	include INC_DIR . $file_name . '.php';
 

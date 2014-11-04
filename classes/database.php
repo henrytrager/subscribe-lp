@@ -204,6 +204,21 @@ class Database {
 
 	}
 
+	public function have_rows( $table_array ) {
+
+		return empty( $this->row_count( $table_array ) ) ? false : true;
+
+	}
+
+	public function row_count( $table_array ) {
+
+		extract( $table_array );
+		$table = TABLE_PREFIX . $name;
+		$results = $this->db_query( "SELECT COUNT(*) FROM $table" );
+		return (int)$results[0][0];
+
+	}
+
 	public function get_data( $table_array, $column_array = NULL, $match_array = NULL ) {
 
 		extract( $table_array );

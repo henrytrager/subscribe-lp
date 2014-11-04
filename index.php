@@ -26,14 +26,14 @@ require_once dirname( __FILE__ ) . '/config/config.php';
 
 	<link rel="shortcut icon" href="<?= ROOT_DIR . 'favicon.ico' ?>">
 
-	<?php get( 'google-analytics' ); ?>
+	<?php inc( 'google-analytics' ); ?>
 
 </head>
 <body>
 
 	<h1>INDEX</h1>
 
-	<?php get( 'form-subscribe' ); ?>
+	<?php inc( 'form-subscribe' ); ?>
 
 </body>
 </html>
