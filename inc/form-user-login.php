@@ -24,7 +24,7 @@ if( !defined( 'RESTRICT' ) || !RESTRICT ) { die( 'Unauthorized Access' ); }
 	<input type="hidden" id="form-user-login-redirect" name="redirect" value="<?= CURRENT_PAGE ?>">
 
 	<label for="form-user-login-email">Email Address</label>
-	<input type="email" id="form-user-login-email" name="email" value="" placeholder="Email Address">
+	<input type="email" id="form-user-login-email" name="email" value="" placeholder="Email Address" autofocus>
 
 	<label for="form-user-login-pswd">Password</label>
 	<input type="password" id="form-user-login-pswd" name="pswd" value="" placeholder="Password">
@@ -35,3 +35,11 @@ if( !defined( 'RESTRICT' ) || !RESTRICT ) { die( 'Unauthorized Access' ); }
 	<?= isset( $_GET['display'] ) ? '<ul id="form-user-initial-display" class="messages"><li>' . base64_decode( $_GET['display'] ) . '</li></ul>' : '<ul id="form-user-initial-display" class="messages" style="display:none;"></ul>'; ?>
 
 </form>
+
+<p><a href="<?= CURRENT_PAGE . '?view=reset' ?>">Forgot your password?</a></p>
+
+<script>
+
+
+
+</script>

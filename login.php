@@ -31,7 +31,21 @@ require_once dirname( __FILE__ ) . '/config/config.php';
 
 	<h1>LOGIN</h1>
 
-	<?php ( $db->have_rows( User::$table ) ) ? inc( 'form-user-login' ) : inc( 'form-user-initial' ); ?>
+	<?php
+
+		if( $_GET['view'] == 'reset' ) :
+
+			inc( 'form-user-reset' );
+
+		else :
+
+			( $db->have_rows( User::$table ) )
+				? inc( 'form-user-login' )
+				: inc( 'form-user-initial' );
+
+		endif;
+
+	?>
 
 </body>
 </html>

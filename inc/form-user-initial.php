@@ -24,7 +24,7 @@ if( !defined( 'RESTRICT' ) || !RESTRICT ) { die( 'Unauthorized Access' ); }
 	<input type="hidden" id="form-user-initial-redirect" name="redirect" value="<?= CURRENT_PAGE ?>">
 
 	<label for="form-user-initial-email">Email Address</label>
-	<input type="email" id="form-user-initial-email" name="email" value="" placeholder="Email Address">
+	<input type="email" id="form-user-initial-email" name="email" value="" placeholder="Email Address" autofocus>
 
 	<label for="form-user-initial-pswd">Password</label>
 	<input type="password" id="form-user-initial-pswd" name="pswd" value="" placeholder="Password">

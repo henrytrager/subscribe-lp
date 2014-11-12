@@ -34,6 +34,11 @@ class User {
 				'encrypt' => true,
 				'default' => 'active'
 			],
+			'role' => [
+				'sql' => 'VARCHAR(255)',
+				'encrypt' => true,
+				'default' => 'administrator'
+			],
 			'create_date' => [
 				'sql' => 'DATE'
 			],

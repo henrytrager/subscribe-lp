@@ -103,7 +103,9 @@ else :
 		$resp['message'] = base64_encode( $resp['message'] );
 		$resp['display'] = base64_encode( $resp['display'] );
 
-		header( 'Location: ' . $redirect . '?' . http_build_query( $resp ), TRUE, 303 );
+		$view = !empty( $view ) ? 'view=' . strtolower( $view ) . '&' : '';
+
+		header( 'Location: ' . $redirect . '?' . $view . http_build_query( $resp ), TRUE, 303 );
 
 	else :
 

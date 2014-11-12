@@ -23,7 +23,8 @@ if( !defined( 'RESTRICT' ) || !RESTRICT ) { die( 'Unauthorized Access' ); }
 	<input type="hidden" id="form-subscribe-redirect" name="redirect" value="<?= CURRENT_PAGE ?>">
 
 	<label for="form-subscribe-email">Email Address</label>
-	<input type="email" id="form-subscribe-email" name="email" value="" placeholder="Email Address">
+	<input type="email" id="form-subscribe-email" name="email" value="" placeholder="Email Address" autofocus>
+	
 	<input type="text" id="form-subscribe-cc" name="cc" value="" placeholder="Leave this field blank">
 	<input type="submit" id="form-subscribe-submit" value="Subscribe">
 
