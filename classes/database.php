@@ -63,7 +63,7 @@ class Database {
 		$sql .= "id BIGINT(20) NOT NULL AUTO_INCREMENT, ";
 
 		foreach( $structure as $column => $args ) {
-			$default = ( !empty( $args['default'] ) && $args['sql'] !== 'LONGTEXT' ) ? " DEFAULT '{$args['default']}'" : "";
+			$default = ( !empty( $args['default'] ) && $args['sql'] !== 'LONGTEXT' ) ? !empty( $args['encrypt'] ) ? " DEFAULT '" . Encryption::encrypt( $args['default'], $key ) . "'" : " DEFAULT '{$args['default']}'" : "";
 			$sql .= "{$column} {$args['sql']} NOT NULL{$default}, ";
 		}
 
